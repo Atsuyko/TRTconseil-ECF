@@ -1,20 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AnnonceController!{% endblock %}
+{% block title %}TRT Conseil - Annonces{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="container mt-4">
+    <h1>Listes des annonces !</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/julie/Desktop/TRTconseil-ECF/src/Controller/AnnonceController.php'|file_link(0) }}">src/Controller/AnnonceController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/julie/Desktop/TRTconseil-ECF/templates/annonce/index.html.twig'|file_link(0) }}">templates/annonce/index.html.twig</a></code></li>
-    </ul>
+    <a href="{{ path('annonce.new') }}" class="btn btn-primary">
+        Publier une noouvelle annonce
+    </a>
+
+    {% for message in app.flashes('success') %}
+    <div class="alert-sucess alert mt-4">
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Annonce N°</th>
+                <th scope="col">Intitulé</th>
+                <th scope="col">Emplacement</th>
+                <th scope="col">Description</th>
+                <th scope="col">Modification</th>
+                <th scope="col">Suppression</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for annonce in annonces %}
+            <tr class="table-secondary">
+                <th scope="row">{{ annonce.id }}</th>
+                <td>{{ annonce.job_title }}</td>
+                <td>{{ annonce.work_place }}</td>
+                <td>{{ annonce.description }}</td>
+                <td>
+                    <a href="{{ path('annonce.edit', { id: annonce.id }) }}" class="btn btn-warning">Modifier</a>
+                </td>
+                <td>
+                    <a href="{{ path('annonce.delete', { id: annonce.id }) }}" class="btn btn-danger">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

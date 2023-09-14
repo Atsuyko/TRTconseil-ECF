@@ -2,17 +2,113 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Annonce;
+use App\Form\AnnonceType;
+use App\Repository\AnnonceRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AnnonceController extends AbstractController
 {
-    #[Route('/annonce', name: 'app_annonce')]
-    public function index(): Response
+    /**
+     * Read, display all annonces
+     *
+     * @param AnnonceRepository $repository
+     * @return Response
+     */
+    #[Route('/annonce', name: 'app_annonce', methods: ['GET'])]
+    public function index(AnnonceRepository $repository): Response
     {
+        $annonces = $repository->findAll();
         return $this->render('annonce/index.html.twig', [
-            'controller_name' => 'AnnonceController',
+            'annonces' => $annonces,
         ]);
+    }
+
+    /**
+     * Create, Add a new annonce
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    #[Route('/annonce/new', 'annonce.new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $manager): Response
+    {
+
+        $annonce = new Annonce();
+        $form = $this->createForm(AnnonceType::class, $annonce);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $annonce = $form->getData();
+
+            $manager->persist($annonce);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre annonce a été transmise à un consultant TRT Conseil pour validation...'
+            );
+
+            return $this->redirectToRoute('app_annonce');
+        }
+
+        return $this->render('annonce/new.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * Update, update an annonce
+     *
+     * @param AnnonceRepository $repository
+     * @param int $id
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    #[Route('/annonce/edit/{id}', 'annonce.edit', methods: ['GET', 'POST'])]
+    public function edit(AnnonceRepository $repository, int $id, Request $request, EntityManagerInterface $manager): Response
+    {
+        $annonce = $repository->findOneBy(["id" => $id]);
+        $form = $this->createForm(AnnonceType::class, $annonce);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $annonce = $form->getData();
+
+            $manager->persist($annonce);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre annonce a bien été modifiée !'
+            );
+
+            return $this->redirectToRoute('app_annonce');
+        }
+
+        return $this->render('annonce/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/annonce/delete/{id}', 'annonce.delete', methods: ['GET'])]
+    public function delete(EntityManagerInterface $manager, Annonce $annonce): Response
+    {
+        $manager->remove($annonce);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            'Votre annonce a bien été supprimée !'
+        );
+
+        return $this->redirectToRoute('app_annonce');
     }
 }

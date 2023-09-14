@@ -1,20 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}TRT Conseil - Accueil{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/julie/Desktop/TRTconseil-ECF/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/julie/Desktop/TRTconseil-ECF/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
+<div class="container mt-4">
+    <div class="jumbotron">
+        <h1 class="display-4">Bienvenue sur TRT Conseil</h1>
+        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+            labore et dolore magna aliqua. Nibh cras pulvinar mattis nunc sed blandit libero volutpat sed. Vulputate
+            odio ut enim blandit volutpat maecenas. Turpis egestas integer eget aliquet. In mollis nunc sed id semper.
+            Lobortis feugiat vivamus at augue eget arcu. Scelerisque eu ultrices vitae auctor eu augue ut lectus.
+            Rhoncus aenean vel elit scelerisque mauris. At volutpat diam ut venenatis tellus in. Amet volutpat consequat
+            mauris nunc congue nisi vitae suscipit. Senectus et netus et malesuada fames. Phasellus egestas tellus
+            rutrum tellus pellentesque eu tincidunt tortor. Elit ut aliquam purus sit amet luctus venenatis lectus.
+            Dictum non consectetur a erat nam at lectus. Cursus vitae congue mauris rhoncus aenean vel.</p>
+        <hr class="my-4">
+        <p>Magna fermentum iaculis eu non diam phasellus. Euismod elementum nisi quis eleifend quam adipiscing vitae.
+            Dictum non consectetur a erat. Lacus vestibulum sed arcu non odio. Enim ut tellus elementum sagittis vitae
+            et leo duis. Eget velit aliquet sagittis id consectetur purus ut. Ac tortor vitae purus faucibus ornare
+            suspendisse sed nisi. Commodo viverra maecenas accumsan lacus vel facilisis volutpat est velit. Quis risus
+            sed vulputate odio. Scelerisque fermentum dui faucibus in ornare. Ultrices neque ornare aenean euismod
+            elementum nisi quis eleifend quam.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="#" role="button">Inscription</a>
+            <a class="btn btn-primary btn-lg" href="#" role="button">Connexion</a>
+        </p>
+    </div>
 </div>
 {% endblock %}
