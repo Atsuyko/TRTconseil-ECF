@@ -49,4 +49,28 @@ class Candidature
 
         return $this;
     }
+
+    public function getCandidat(): ?Candidat
+    {
+        return $this->candidat;
+    }
+
+    public function setCandidat(?Candidat $candidat): static
+    {
+        $this->candidat = $candidat;
+
+        return $this;
+    }
+
+    public function getAnnonce(): ?Annonce
+    {
+        return $this->annonce;
+    }
+
+    public function setAnnonce(?Annonce $annonce): static
+    {
+        $this->annonce = $annonce;
+
+        return $this;
+    }
 }

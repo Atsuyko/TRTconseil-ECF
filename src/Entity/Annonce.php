@@ -79,4 +79,16 @@ class Annonce
 
         return $this;
     }
+
+    public function getRecruteur(): ?Recruteur
+    {
+        return $this->recruteur;
+    }
+
+    public function setRecruteur(?Recruteur $recruteur): static
+    {
+        $this->recruteur = $recruteur;
+
+        return $this;
+    }
 }
