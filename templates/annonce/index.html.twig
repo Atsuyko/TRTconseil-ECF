@@ -6,10 +6,12 @@
 
 <div class="container mt-4">
     <h1>Listes des annonces !</h1>
-
+    {% if is_granted('ROLE_RECRUTEUR') %}
     <a href="{{ path('annonce.new') }}" class="btn btn-primary">
         Publier une noouvelle annonce
     </a>
+    {% endif %}
+
 
     {% for message in app.flashes('success') %}
     <div class="alert-sucess alert mt-4">
@@ -24,8 +26,13 @@
                 <th scope="col">Intitulé</th>
                 <th scope="col">Emplacement</th>
                 <th scope="col">Description</th>
+                {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_CONSULTANT') or is_granted('ROLE_ADMIN') %}
                 <th scope="col">Modification</th>
                 <th scope="col">Suppression</th>
+                {% elseif is_granted('ROLE_CANDIDAT') %}
+                <th scope="col">Candidature</th>
+                {% endif %}
+
             </tr>
         </thead>
         <tbody>
@@ -35,12 +42,18 @@
                 <td>{{ annonce.job_title }}</td>
                 <td>{{ annonce.work_place }}</td>
                 <td>{{ annonce.description }}</td>
+                {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_CONSULTANT') or is_granted('ROLE_ADMIN')%}
                 <td>
                     <a href="{{ path('annonce.edit', { id: annonce.id }) }}" class="btn btn-warning">Modifier</a>
                 </td>
                 <td>
                     <a href="{{ path('annonce.delete', { id: annonce.id }) }}" class="btn btn-danger">Supprimer</a>
                 </td>
+                {% elseif is_granted('ROLE_CANDIDAT') %}
+                <td>
+                    <a href="{{ path('#') }}" class="btn btn-danger">Postuler</a>
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

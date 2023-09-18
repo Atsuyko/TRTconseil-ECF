@@ -6,10 +6,13 @@ use App\Entity\Annonce;
 use App\Form\AnnonceType;
 use App\Repository\AnnonceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 class AnnonceController extends AbstractController
 {
@@ -36,6 +39,7 @@ class AnnonceController extends AbstractController
      * @return Response
      */
     #[Route('/annonce/new', 'annonce.new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_RECRUTEUR')]
     public function new(Request $request, EntityManagerInterface $manager): Response
     {
 
@@ -73,6 +77,7 @@ class AnnonceController extends AbstractController
      * @return Response
      */
     #[Route('/annonce/edit/{id}', 'annonce.edit', methods: ['GET', 'POST'])]
+    #[Security("is_granted('ROLE_RECRUTEUR') and user === annonce.getUser()")]
     public function edit(AnnonceRepository $repository, int $id, Request $request, EntityManagerInterface $manager): Response
     {
         $annonce = $repository->findOneBy(["id" => $id]);
@@ -99,6 +104,7 @@ class AnnonceController extends AbstractController
     }
 
     #[Route('/annonce/delete/{id}', 'annonce.delete', methods: ['GET'])]
+    #[Security("(is_granted('ROLE_RECRUTEUR') and user === annonce.getUser()) or (is_granted('ROLE_CONSULTANT')) or (is_granted('ROLE_ADMIN'))")]
     public function delete(EntityManagerInterface $manager, Annonce $annonce): Response
     {
         $manager->remove($annonce);
