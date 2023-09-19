@@ -30,6 +30,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $role = null;
 
+    // #[ORM\Column(nullable: true)]
+    // private ?bool $IsValidate = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -111,4 +114,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    // public function isIsValidate(): ?bool
+    // {
+    //     return $this->IsValidate;
+    // }
+
+    // public function setIsValidate(bool $IsValidate): static
+    // {
+    //     $this->IsValidate = $IsValidate;
+
+    //     return $this;
+    // }
 }
