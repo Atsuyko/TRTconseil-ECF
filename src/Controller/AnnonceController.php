@@ -3,16 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Annonce;
-use App\Entity\Recruteur;
 use App\Form\AnnonceType;
 use App\Repository\AnnonceRepository;
-use App\Repository\RecruteurRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -25,6 +23,7 @@ class AnnonceController extends AbstractController
      * @return Response
      */
     #[Route('/annonce', name: 'app_annonce', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function index(AnnonceRepository $repository): Response
     {
         $annonces = $repository->findAll();
@@ -42,17 +41,17 @@ class AnnonceController extends AbstractController
      */
     #[Route('/annonce/new', 'annonce.new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_RECRUTEUR')]
-    public function new(Request $request, EntityManagerInterface $manager, RecruteurRepository $recruteurRepository, Recruteur $id): Response
+    public function new(Request $request, EntityManagerInterface $manager): Response
     {
 
-        $recruteur = $recruteurRepository->findOneBy(["id" => $id]);
+        $recruteur = $this->getUser();
 
         $newAnnonce = new Annonce();
         $form = $this->createForm(AnnonceType::class, $newAnnonce);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $newAnnonce->setRecruteur($recruteur);
+            $newAnnonce->setUser($recruteur);
             $newAnnonce->setJobTitle($form->get('job_title')->getData());
             $newAnnonce->setWorkPlace($form->get('work_place')->getData());
             $newAnnonce->setDescription($form->get('description')->getData());
@@ -111,8 +110,9 @@ class AnnonceController extends AbstractController
 
     #[Route('/annonce/delete/{id}', 'annonce.delete', methods: ['GET'])]
     #[Security("(is_granted('ROLE_RECRUTEUR') and user === annonce.getUser()) or (is_granted('ROLE_CONSULTANT')) or (is_granted('ROLE_ADMIN'))")]
-    public function delete(EntityManagerInterface $manager, Annonce $annonce): Response
+    public function delete(EntityManagerInterface $manager, AnnonceRepository $annonceRepository, int $id): Response
     {
+        $annonce = $annonceRepository->findOneBy(["id" => $id]);
         $manager->remove($annonce);
         $manager->flush();
 

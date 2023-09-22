@@ -16,7 +16,7 @@ class Annonce
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Recruteur $recruteur = null;
+    private ?User $user = null;
 
     #[ORM\Column(length: 255)]
     private ?string $job_title = null;
@@ -32,14 +32,14 @@ class Annonce
         return $this->id;
     }
 
-    public function getRecruteurId(): ?Recruteur
+    public function getUser(): ?User
     {
-        return $this->recruteur;
+        return $this->user;
     }
 
-    public function setRecruteurId(?Recruteur $recruteur): static
+    public function setUser(?User $user): static
     {
-        $this->recruteur = $recruteur;
+        $this->user = $user;
 
         return $this;
     }
@@ -76,18 +76,6 @@ class Annonce
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getRecruteur(): ?Recruteur
-    {
-        return $this->recruteur;
-    }
-
-    public function setRecruteur(?Recruteur $recruteur): static
-    {
-        $this->recruteur = $recruteur;
 
         return $this;
     }

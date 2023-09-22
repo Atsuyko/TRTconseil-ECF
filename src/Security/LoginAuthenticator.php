@@ -55,9 +55,9 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         } else if (in_array('ROLE_CONSULTANT', $user->getRoles(), true)) {
             return new RedirectResponse($this->urlGenerator->generate('app_consultant'));
         } else if (in_array('ROLE_RECRUTEuR', $user->getRoles(), true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_recruter'));
+            return new RedirectResponse($this->urlGenerator->generate('app_annonce'));
         } else if (in_array('ROLE_CANDIDAT', $user->getRoles(), true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_candidat'));
+            return new RedirectResponse($this->urlGenerator->generate('app_annonce'));
         } else if (in_array('ROLE_USER', $user->getRoles(), true)) {
             return new RedirectResponse($this->urlGenerator->generate('app_annonce'));
         }

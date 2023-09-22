@@ -39,9 +39,9 @@
             {% for annonce in annonces %}
             <tr class="table-secondary">
                 <th scope="row">{{ annonce.id }}</th>
-                <td>{{ annonce.job_title }}</td>
-                <td>{{ annonce.work_place }}</td>
-                <td>{{ annonce.description }}</td>
+                <td>{{ annonce.JobTitle }}</td>
+                <td>{{ annonce.WorkPlace }}</td>
+                <td>{{ annonce.Description }}</td>
                 {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_CONSULTANT') or is_granted('ROLE_ADMIN')%}
                 <td>
                     <a href="{{ path('annonce.edit', { id: annonce.id }) }}" class="btn btn-warning">Modifier</a>
@@ -51,7 +51,7 @@
                 </td>
                 {% elseif is_granted('ROLE_CANDIDAT') %}
                 <td>
-                    <a href="{{ path('#') }}" class="btn btn-danger">Postuler</a>
+                    <a href="{{ path('app_candidature') }}" class="btn btn-success">Postuler</a>
                 </td>
                 {% endif %}
             </tr>
