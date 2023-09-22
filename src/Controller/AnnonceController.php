@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Annonce;
+use App\Entity\Recruteur;
 use App\Form\AnnonceType;
 use App\Repository\AnnonceRepository;
+use App\Repository\RecruteurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -40,18 +42,22 @@ class AnnonceController extends AbstractController
      */
     #[Route('/annonce/new', 'annonce.new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_RECRUTEUR')]
-    public function new(Request $request, EntityManagerInterface $manager): Response
+    public function new(Request $request, EntityManagerInterface $manager, RecruteurRepository $recruteurRepository, Recruteur $id): Response
     {
 
-        $annonce = new Annonce();
-        $form = $this->createForm(AnnonceType::class, $annonce);
+        $recruteur = $recruteurRepository->findOneBy(["id" => $id]);
 
+        $newAnnonce = new Annonce();
+        $form = $this->createForm(AnnonceType::class, $newAnnonce);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $annonce = $form->getData();
+            $newAnnonce->setRecruteur($recruteur);
+            $newAnnonce->setJobTitle($form->get('job_title')->getData());
+            $newAnnonce->setWorkPlace($form->get('work_place')->getData());
+            $newAnnonce->setDescription($form->get('description')->getData());
 
-            $manager->persist($annonce);
+            $manager->persist($newAnnonce);
             $manager->flush();
 
             $this->addFlash(
@@ -78,9 +84,9 @@ class AnnonceController extends AbstractController
      */
     #[Route('/annonce/edit/{id}', 'annonce.edit', methods: ['GET', 'POST'])]
     #[Security("is_granted('ROLE_RECRUTEUR') and user === annonce.getUser()")]
-    public function edit(AnnonceRepository $repository, int $id, Request $request, EntityManagerInterface $manager): Response
+    public function edit(AnnonceRepository $annonceRepository, int $id, Request $request, EntityManagerInterface $manager): Response
     {
-        $annonce = $repository->findOneBy(["id" => $id]);
+        $annonce = $annonceRepository->findOneBy(["id" => $id]);
         $form = $this->createForm(AnnonceType::class, $annonce);
         $form->handleRequest($request);
 

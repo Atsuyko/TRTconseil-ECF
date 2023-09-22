@@ -2,58 +2,57 @@
 
 namespace App\Form;
 
-use App\Entity\Candidat;
+use App\Entity\Recruteur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class CandidatType extends AbstractType
+class RecruteurType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class, [
+            ->add('company', TextType::class, [
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'label' => "Nom",
+                'label' => "Entreprise",
                 'label_attr' => [
                     'class' => 'form-label',
                 ],
                 'mapped' => false
             ])
-            ->add('prenom', TextType::class, [
+            ->add('company_adress', TextType::class, [
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'label' => "Prénom",
+                'label' => "Adresse",
                 'label_attr' => [
                     'class' => 'form-label',
                 ],
                 'mapped' => false
             ])
-            ->add('cv', FileType::class, [
+            ->add('company_postcode', TextType::class, [
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'label' => "CV (PDF uniquement)",
+                'label' => "Code Postal",
                 'label_attr' => [
                     'class' => 'form-label',
                 ],
-                'mapped' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'application/pdf',
-                        ],
-                        'mimeTypesMessage' => 'Veuillez sélectionner un fichier PDF',
-                    ])
-                ]
+                'mapped' => false
+            ])
+            ->add('company_city', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'label' => "Ville",
+                'label_attr' => [
+                    'class' => 'form-label',
+                ],
+                'mapped' => false
             ])
             ->add('submit',  SubmitType::class, [
                 'attr' => [
@@ -65,7 +64,7 @@ class CandidatType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Candidat::class,
+            'data_class' => Recruteur::class,
         ]);
     }
 }

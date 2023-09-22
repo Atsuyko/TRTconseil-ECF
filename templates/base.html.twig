@@ -50,10 +50,22 @@
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                                 aria-haspopup="true" aria-expanded="false">{{ app.user.Email }}</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Modifier mon profil</a>
+                                {% if 'ROLE_CANDIDAT' in app.user.roles %}
+                                <a class="dropdown-item" href="{{ path('app_candidat') }}">Compléter mon profil</a>
                                 <div class="dropdown-divider"></div>
+                                {% endif %}
+                                {% if 'ROLE_RECRUTEUR' in app.user.roles %}
+                                <a class="dropdown-item" href="{{ path('app_recruteur') }}">Compléter mon profil</a>
+                                <div class="dropdown-divider"></div>
+                                {% endif %}
+                                {% if 'ROLE_CONSULTANT' in app.user.roles %}
+                                <a class="dropdown-item" href="{{ path('app_consultant') }}">Comptes à valider</a>
+                                <div class="dropdown-divider"></div>
+                                {% endif %}
                                 {% if 'ROLE_ADMIN' in app.user.roles %}
                                 <a class="dropdown-item" href="{{ path('admin') }}">Admin Panel</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ path('app_admin') }}">Créer un consultant</a>
                                 <div class="dropdown-divider"></div>
                                 {% endif %}
                                 <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
