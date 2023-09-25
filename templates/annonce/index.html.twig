@@ -26,7 +26,7 @@
                 <th scope="col">Intitulé</th>
                 <th scope="col">Emplacement</th>
                 <th scope="col">Description</th>
-                {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_CONSULTANT') or is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_RECRUTEUR') %}
                 <th scope="col">Modification</th>
                 <th scope="col">Suppression</th>
                 {% elseif is_granted('ROLE_CANDIDAT') %}
@@ -42,7 +42,7 @@
                 <td>{{ annonce.JobTitle }}</td>
                 <td>{{ annonce.WorkPlace }}</td>
                 <td>{{ annonce.Description }}</td>
-                {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_CONSULTANT') or is_granted('ROLE_ADMIN')%}
+                {% if is_granted('ROLE_RECRUTEUR') %}
                 <td>
                     <a href="{{ path('annonce.edit', { id: annonce.id }) }}" class="btn btn-warning">Modifier</a>
                 </td>

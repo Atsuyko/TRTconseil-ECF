@@ -3,13 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Recruteur;
+use App\Entity\User;
 use App\Form\RecruteurType;
 use App\Repository\RecruteurRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RecruteurController extends AbstractController
@@ -23,12 +25,20 @@ class RecruteurController extends AbstractController
      * @return Response
      */
     #[Route('/recruteur', name: 'app_recruteur', methods: ['GET'])]
-    #[Security("is_granted('ROLE_RECRUTEUR') and user === recruteur.getUser()")]
-    public function index(RecruteurRepository $repository, Recruteur $id): Response
+    // #[IsGranted(new Expression("is_granted('ROLE_RECRUTEUR') and user === recruteur.getUser()"))]
+    public function index(RecruteurRepository $recruteurRepository): Response
     {
-        $recruteur = $repository->findOneBy(["id" => $id]);
+        $currentUser = $this->getUser();
+        $recruteurs = $recruteurRepository->findAll();
+        foreach ($recruteurs as $recruteur) {
+            if ($recruteur->getUser() === $currentUser) {
+                $currentRecruteur = $recruteur;
+            }
+        }
+
+
         return $this->render('recruteur/index.html.twig', [
-            'recruteur' => $recruteur,
+            'recruteur' => $currentRecruteur,
         ]);
     }
 
@@ -40,7 +50,7 @@ class RecruteurController extends AbstractController
      * @return Response
      */
     #[Route('/recruteur/new', name: 'recruteur.new')]
-    #[Security("is_granted('ROLE_RECRUTEUR') and user === recruteur.getUser()")]
+    // #[IsGranted(new Expression("is_granted('ROLE_RECRUTEUR') and user === recruteur.getUser()"))]
     public function new(Request $request, EntityManagerInterface $manager): Response
     {
 
@@ -81,7 +91,7 @@ class RecruteurController extends AbstractController
      * @return Response
      */
     #[Route('/recruteur/edit/{id}', 'recruteur.edit', methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_RECRUTEUR') and user === recruteur.getUser()")]
+    // #[IsGranted(new Expression("is_granted('ROLE_RECRUTEUR') and user === recruteur.getUser()"))]
     public function edit(RecruteurRepository $recruteurRepository, int $id, Request $request, EntityManagerInterface $manager): Response
     {
         $recruteur = $recruteurRepository->findOneBy(["id" => $id]);
@@ -93,11 +103,6 @@ class RecruteurController extends AbstractController
 
             $manager->persist($recruteur);
             $manager->flush();
-
-            $this->addFlash(
-                'success',
-                'Votre profil a bien été modifiée !'
-            );
 
             return $this->redirectToRoute('app_recruteur');
         }

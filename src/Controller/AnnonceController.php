@@ -6,10 +6,10 @@ use App\Entity\Annonce;
 use App\Form\AnnonceType;
 use App\Repository\AnnonceRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -82,34 +82,40 @@ class AnnonceController extends AbstractController
      * @return Response
      */
     #[Route('/annonce/edit/{id}', 'annonce.edit', methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_RECRUTEUR') and user === annonce.getUser()")]
+    // #[IsGranted(new Expression("is_granted('ROLE_RECRUTEUR') and user === annonce.getUser()"))]
     public function edit(AnnonceRepository $annonceRepository, int $id, Request $request, EntityManagerInterface $manager): Response
     {
+        $currentUser = $this->getUser();
         $annonce = $annonceRepository->findOneBy(["id" => $id]);
-        $form = $this->createForm(AnnonceType::class, $annonce);
-        $form->handleRequest($request);
+        if ($annonce->getUser() === $currentUser) {
+            $form = $this->createForm(AnnonceType::class, $annonce);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $annonce = $form->getData();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $annonce = $form->getData();
 
-            $manager->persist($annonce);
-            $manager->flush();
+                $manager->persist($annonce);
+                $manager->flush();
 
-            $this->addFlash(
-                'success',
-                'Votre annonce a bien été modifiée !'
-            );
+                $this->addFlash(
+                    'success',
+                    'Votre annonce a bien été modifiée !'
+                );
 
+                return $this->redirectToRoute('app_annonce');
+            }
+
+            return $this->render('annonce/edit.html.twig', [
+                'form' => $form->createView()
+            ]);
+        } else {
             return $this->redirectToRoute('app_annonce');
         }
-
-        return $this->render('annonce/edit.html.twig', [
-            'form' => $form->createView()
-        ]);
     }
 
+
     #[Route('/annonce/delete/{id}', 'annonce.delete', methods: ['GET'])]
-    #[Security("(is_granted('ROLE_RECRUTEUR') and user === annonce.getUser()) or (is_granted('ROLE_CONSULTANT')) or (is_granted('ROLE_ADMIN'))")]
+    // #[IsGranted(new Expression("(is_granted('ROLE_RECRUTEUR') and user === annonce.getUser()) or (is_granted('ROLE_CONSULTANT')) or (is_granted('ROLE_ADMIN'))"))]
     public function delete(EntityManagerInterface $manager, AnnonceRepository $annonceRepository, int $id): Response
     {
         $annonce = $annonceRepository->findOneBy(["id" => $id]);
