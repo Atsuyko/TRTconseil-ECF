@@ -1,11 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Compléter mon profil{% endblock %}
+{% block title %}Mon profil{% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1 class="mt-4">Complétion du profil</h1>
-
-    {{form(form)}}
+<div class="container mt-4">
+    <h1 class="mt-4">Mon profil</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">ID Candidat</th>
+                <th scope="col">Email</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">CV</th>
+                <th scope="col">Modification</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-secondary">
+                <th scope="row">{{ candidat.id|default('undefined') }}</th>
+                <td>{{ app.user.email|default('undefined') }}</td>
+                <td>{{ candidat.Nom|default('undefined') }}</td>
+                <td>{{ candidat.Prenom|default('undefined') }}</td>
+                <td>{{ candidat.Cv|default('undefined') }}</td>
+                <td>
+                    <a href="{{ path('candidat.edit', { id: candidat.id|default('undefined') }) }}"
+                        class="btn btn-warning">
+                        Modifier mon profil
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 {% endblock %}

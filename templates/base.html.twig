@@ -51,7 +51,8 @@
                                 aria-haspopup="true" aria-expanded="false">{{ app.user.Email }}</a>
                             <div class="dropdown-menu">
                                 {% if 'ROLE_CANDIDAT' in app.user.roles %}
-                                <a class="dropdown-item" href="{{ path('app_candidat') }}">Compléter mon profil</a>
+                                <a class="dropdown-item" href="{{ path('app_candidat') }}">Mon profil</a>
+                                <a class="dropdown-item" href="{{ path('candidat.new') }}">Créer mon profil</a>
                                 <div class="dropdown-divider"></div>
                                 {% endif %}
                                 {% if 'ROLE_RECRUTEUR' in app.user.roles %}

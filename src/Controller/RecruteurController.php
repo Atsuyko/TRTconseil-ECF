@@ -21,7 +21,6 @@ class RecruteurController extends AbstractController
      * Read, display recruteur
      *
      * @param RecruteurRepository $repository
-     * @param int $id
      * @return Response
      */
     #[Route('/recruteur', name: 'app_recruteur', methods: ['GET'])]
