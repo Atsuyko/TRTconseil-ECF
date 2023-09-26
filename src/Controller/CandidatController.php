@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Candidat;
-use App\Entity\User;
 use App\Form\CandidatType;
 use App\Repository\CandidatRepository;
 use Doctrine\ORM\EntityManagerInterface;

@@ -127,6 +127,7 @@ class AnnonceController extends AbstractController
                 'form' => $form->createView()
             ]);
         } else {
+
             return $this->redirectToRoute('app_annonce');
         }
     }
@@ -167,6 +168,7 @@ class AnnonceController extends AbstractController
 
             return $this->redirectToRoute('app_annonce');
         } else {
+
             return $this->redirectToRoute('app_annonce');
         }
     }

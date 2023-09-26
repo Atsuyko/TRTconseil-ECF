@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Candidature soumise{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <h1>Candidature soumise</h1>
+  <p>Votre candidature pour le poste de {{ annonce.JobTitle }} à bien été transmise à TRT Conseil pour validation.</p>
+  <a href="{{ path('app_annonce') }}" class="btn btn-secondary">Retour à la liste des annonces</a>
+</div>
+{% endblock %}

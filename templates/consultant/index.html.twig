@@ -8,7 +8,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Utilisateur N°</th>
+                <th scope="col">ID</th>
                 <th scope="col">Role</th>
                 <th scope="col">Email</th>
                 <th scope="col">Valider</th>
@@ -39,7 +39,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Utilisateur N°</th>
+                <th scope="col">ID</th>
                 <th scope="col">Role</th>
                 <th scope="col">Email</th>
                 <th scope="col">Valider</th>
@@ -70,8 +70,9 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Annonce N°</th>
-                <th scope="col">Intitulé</th>
+                <th scope="col">ID</th>
+                <th scope="col">Entreprise</th>
+                <th scope="col">Poste</th>
                 <th scope="col">Emplacement</th>
                 <th scope="col">Description</th>
                 <th scope="col">Valider</th>
@@ -82,6 +83,7 @@
             {% for recAnnonce in recAnnonces %}
             <tr class="table-secondary">
                 <th scope="row">{{ recAnnonce.id }}</th>
+                <td>{{ recAnnonce.Recruteur.Company }}</td>
                 <td>{{ recAnnonce.JobTitle }}</td>
                 <td>{{ recAnnonce.WorkPlace }}</td>
                 <td>{{ recAnnonce.Description }}</td>
@@ -103,7 +105,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Candidature N°</th>
+                <th scope="col">ID</th>
                 <th scope="col">Nom</th>
                 <th scope="col">Prénom</th>
                 <th scope="col">CV</th>

@@ -43,7 +43,7 @@
                     </li>
                     {% endif %}
                 </ul>
-                <div class="d-flex" style="margin-right: 5rem;">
+                <div class="d-flex" style="margin-right: 6rem;">
                     <ul class="navbar-nav me-auto">
                         {% if app.user %}
                         <li class="nav-item dropdown">
@@ -61,7 +61,7 @@
                                 <div class="dropdown-divider"></div>
                                 {% endif %}
                                 {% if 'ROLE_CONSULTANT' in app.user.roles %}
-                                <a class="dropdown-item" href="{{ path('app_consultant') }}">Comptes à valider</a>
+                                <a class="dropdown-item" href="{{ path('app_consultant') }}">Validation en attente</a>
                                 <div class="dropdown-divider"></div>
                                 {% endif %}
                                 {% if 'ROLE_ADMIN' in app.user.roles %}
