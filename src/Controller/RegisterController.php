@@ -30,6 +30,7 @@ class RegisterController extends AbstractController
                 )
             );
             $user->setRoles(["ROLE_USER"]);
+            $user->setIsValidate((false));
 
             $manager->persist($user);
             $manager->flush();

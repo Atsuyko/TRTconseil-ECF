@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compte rejeté{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <h1>Compte Rejeté !</h1>
+  <p>Le compte du candidat {{ user.email }} à bien été rejeté.</p>
+  <p>Le compte à été supprimé.</p>
+  <a href="{{ path('app_consultant') }}" class="btn btn-secondary">Retour à la liste des comptes à valider</a>
+</div>
+{% endblock %}

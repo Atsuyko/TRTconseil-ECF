@@ -21,6 +21,9 @@ class Candidature
     #[ORM\JoinColumn(nullable: false)]
     private ?Annonce $annonce = null;
 
+    #[ORM\Column]
+    private ?bool $IsValidate = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +73,18 @@ class Candidature
     public function setAnnonce(?Annonce $annonce): static
     {
         $this->annonce = $annonce;
+
+        return $this;
+    }
+
+    public function isIsValidate(): ?bool
+    {
+        return $this->IsValidate;
+    }
+
+    public function setIsValidate(bool $IsValidate): static
+    {
+        $this->IsValidate = $IsValidate;
 
         return $this;
     }

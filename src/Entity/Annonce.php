@@ -16,7 +16,7 @@ class Annonce
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?Recruteur $recruteur = null;
 
     #[ORM\Column(length: 255)]
     private ?string $job_title = null;
@@ -27,19 +27,22 @@ class Annonce
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[ORM\Column]
+    private ?bool $IsValidate = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getRecruteur(): ?Recruteur
     {
-        return $this->user;
+        return $this->recruteur;
     }
 
-    public function setUser(?User $user): static
+    public function setRecruteur(?Recruteur $recruteur): static
     {
-        $this->user = $user;
+        $this->recruteur = $recruteur;
 
         return $this;
     }
@@ -76,6 +79,18 @@ class Annonce
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function isIsValidate(): ?bool
+    {
+        return $this->IsValidate;
+    }
+
+    public function setIsValidate(bool $IsValidate): static
+    {
+        $this->IsValidate = $IsValidate;
 
         return $this;
     }

@@ -1,20 +1,135 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ConsultantController!{% endblock %}
+{% block title %}Validation en attente{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/julie/Desktop/TRTconseil-ECF/src/Controller/ConsultantController.php'|file_link(0) }}">src/Controller/ConsultantController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/julie/Desktop/TRTconseil-ECF/templates/consultant/index.html.twig'|file_link(0) }}">templates/consultant/index.html.twig</a></code></li>
-    </ul>
+<div class="container mt-4">
+    <h1>Listes des candidats à valider</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Utilisateur N°</th>
+                <th scope="col">Role</th>
+                <th scope="col">Email</th>
+                <th scope="col">Valider</th>
+                <th scope="col">Rejeter</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for userCandidat in userCandidats %}
+            <tr class="table-secondary">
+                <th scope="row">{{ userCandidat.id }}</th>
+                <td>{{ userCandidat.Role }}</td>
+                <td>{{ userCandidat.Email }}</td>
+                <td>
+                    <a href="{{ path('consultant.validate.candidat', { id: userCandidat.id }) }}"
+                        class="btn btn-success">Valider</a>
+                </td>
+                <td>
+                    <a href="{{ path('consultant.reject.candidat', { id: userCandidat.id }) }}"
+                        class="btn btn-danger">Rejeter</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="container mt-4">
+    <h1>Listes des recruteurs à valider</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Utilisateur N°</th>
+                <th scope="col">Role</th>
+                <th scope="col">Email</th>
+                <th scope="col">Valider</th>
+                <th scope="col">Rejeter</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for userRecruteur in userRecruteurs %}
+            <tr class="table-secondary">
+                <th scope="row">{{ userRecruteur.id }}</th>
+                <td>{{ userRecruteur.Role }}</td>
+                <td>{{ userRecruteur.Email }}</td>
+                <td>
+                    <a href="{{ path('consultant.validate.recruteur', { id: userRecruteur.id }) }}"
+                        class="btn btn-success">Valider</a>
+                </td>
+                <td>
+                    <a href="{{ path('consultant.reject.recruteur', { id: userRecruteur.id }) }}"
+                        class="btn btn-danger">Rejeter</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="container mt-4">
+    <h1>Listes des annonces à valider</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Annonce N°</th>
+                <th scope="col">Intitulé</th>
+                <th scope="col">Emplacement</th>
+                <th scope="col">Description</th>
+                <th scope="col">Valider</th>
+                <th scope="col">Rejeter</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recAnnonce in recAnnonces %}
+            <tr class="table-secondary">
+                <th scope="row">{{ recAnnonce.id }}</th>
+                <td>{{ recAnnonce.JobTitle }}</td>
+                <td>{{ recAnnonce.WorkPlace }}</td>
+                <td>{{ recAnnonce.Description }}</td>
+                <td>
+                    <a href="{{ path('consultant.validate.annonce', { id: recAnnonce.id }) }}"
+                        class="btn btn-success">Valider</a>
+                </td>
+                <td>
+                    <a href="{{ path('consultant.reject.annonce', { id: recAnnonce.id }) }}"
+                        class="btn btn-danger">Rejeter</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="container mt-4">
+    <h1>Listes des candidature à valider</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Candidature N°</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">CV</th>
+                <th scope="col">Valider</th>
+                <th scope="col">Rejeter</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for canCandidature in canCandidatures %}
+            <tr class="table-secondary">
+                <th scope="row">{{ canCandidature.id }}</th>
+                <td>{{ canCandidature.Annonce.JobTitle }}</td>
+                <td>{{ canCandidature.Candidat.Nom }}</td>
+                <td>{{ canCandidature.Candidat.Prenom }}</td>
+                <td>{{ canCandidature.Candidat.Cv }}</td>
+                <td>
+                    <a href="{{ path('consultant.validate.candidature', { id: canCandidature.id }) }}"
+                        class="btn btn-success">Valider</a>
+                </td>
+                <td>
+                    <a href="{{ path('consultant.reject.candidature', { id: canCandidature.id }) }}"
+                        class="btn btn-danger">Rejeter</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}
