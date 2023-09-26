@@ -132,6 +132,15 @@ class AnnonceController extends AbstractController
     }
 
 
+    /**
+     * Delete, delete an annonce
+     *
+     * @param AnnonceRepository $repository
+     * @param int $id
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/annonce/delete/{id}', 'annonce.delete', methods: ['GET'])]
     // #[IsGranted(new Expression("(is_granted('ROLE_RECRUTEUR') and user === annonce.getUser()) or (is_granted('ROLE_CONSULTANT')) or (is_granted('ROLE_ADMIN'))"))]
     public function delete(EntityManagerInterface $manager, AnnonceRepository $annonceRepository, int $id, RecruteurRepository $recruteurRepository): Response

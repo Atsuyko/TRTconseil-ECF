@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Annonce;
+use App\Entity\Candidature;
 use App\Repository\UserRepository;
 use App\Repository\AnnonceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +15,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ConsultantController extends AbstractController
 {
+    /**
+     * Display user, annonce, candidature isValidate === false
+     *
+     * @param UserRepository $userRepository
+     * @param AnnonceRepository $annonceRepository
+     * @param CandidatureRepository $candidatureRepository
+     * @return Response
+     */
     #[Route('/consultant', name: 'app_consultant')]
     public function index(UserRepository $userRepository, AnnonceRepository $annonceRepository, CandidatureRepository $candidatureRepository): Response
     {
@@ -60,6 +70,12 @@ class ConsultantController extends AbstractController
         ]);
     }
 
+    /**
+     * Validate a candidat
+     * 
+     * @param User $user
+     * @param EntityManagerInterface $manager
+     */
     #[Route('/consultant/validate-candidat/{id}', name: 'consultant.validate.candidat', methods: ['GET', 'POST'])]
     public function validateCandidat(User $user, EntityManagerInterface $manager): Response
     {
@@ -73,6 +89,12 @@ class ConsultantController extends AbstractController
         ]);
     }
 
+    /**
+     * Reject a candidat
+     * 
+     * @param User $user
+     * @param EntityManagerInterface $manager
+     */
     #[Route('/consultant/reject-candidat/{id}', name: 'consultant.reject.candidat', methods: ['GET', 'POST'])]
     public function rejectCandidat(User $user, EntityManagerInterface $manager): Response
     {
@@ -84,6 +106,12 @@ class ConsultantController extends AbstractController
         ]);
     }
 
+    /**
+     * Validate a recruteur
+     * 
+     * @param User $user
+     * @param EntityManagerInterface $manager
+     */
     #[Route('/consultant/validate-recruteur/{id}', name: 'consultant.validate.recruteur', methods: ['GET', 'POST'])]
     public function validateRecruteur(User $user, EntityManagerInterface $manager): Response
     {
@@ -97,6 +125,12 @@ class ConsultantController extends AbstractController
         ]);
     }
 
+    /**
+     * reject a recruteur
+     * 
+     * @param User $user
+     * @param EntityManagerInterface $manager
+     */
     #[Route('/consultant/reject-recruteur/{id}', name: 'consultant.reject.recruteur', methods: ['GET', 'POST'])]
     public function rejectRecruteur(User $user, EntityManagerInterface $manager): Response
     {
@@ -105,6 +139,76 @@ class ConsultantController extends AbstractController
 
         return $this->render('consultant/reject_recruteur.html.twig', [
             'user' => $user,
+        ]);
+    }
+
+    /**
+     * Validate an annonce
+     * 
+     * @param Annonce $annonce
+     * @param EntityManagerInterface $manager
+     */
+    #[Route('/consultant/validate-annonce/{id}', name: 'consultant.validate.annonce', methods: ['GET', 'POST'])]
+    public function validateAnnonce(Annonce $annonce, EntityManagerInterface $manager): Response
+    {
+        $annonce->setIsValidate(true);
+        $manager->persist($annonce);
+        $manager->flush();
+
+        return $this->render('consultant/validate_annonce.html.twig', [
+            'annonce' => $annonce,
+        ]);
+    }
+
+    /**
+     * Reject an annonce
+     * 
+     * @param Annonce $annonce
+     * @param EntityManagerInterface $manager
+     */
+    #[Route('/consultant/reject-annonce/{id}', name: 'consultant.reject.annonce', methods: ['GET', 'POST'])]
+    public function rejectAnnonce(Annonce $annonce, EntityManagerInterface $manager): Response
+    {
+        $manager->remove($annonce);
+        $manager->flush();
+
+        return $this->render('consultant/reject_annonce.html.twig', [
+            'annonce' => $annonce,
+        ]);
+    }
+
+    /**
+     * Validate a candidature
+     * 
+     * @param Candidature $candidature
+     * @param EntityManagerInterface $manager
+     */
+    #[Route('/consultant/validate-candidature/{id}', name: 'consultant.validate.candidature', methods: ['GET', 'POST'])]
+    public function validateCandidature(Candidature $candidature, EntityManagerInterface $manager): Response
+    {
+        $candidature->setIsValidate(true);
+        $manager->persist($candidature);
+        $manager->flush();
+
+        return $this->render('consultant/validate_candidature.html.twig', [
+            'candidature' => $candidature,
+        ]);
+    }
+
+    /**
+     * Reject an candidature
+     * 
+     * @param Candidature $candidature
+     * @param EntityManagerInterface $manager
+     */
+    #[Route('/consultant/reject-candidature/{id}', name: 'consultant.reject.candidature', methods: ['GET', 'POST'])]
+    public function rejectCandidature(Candidature $candidature, EntityManagerInterface $manager): Response
+    {
+        $manager->remove($candidature);
+        $manager->flush();
+
+        return $this->render('consultant/reject_candidature.html.twig', [
+            'candidature' => $candidature,
         ]);
     }
 }

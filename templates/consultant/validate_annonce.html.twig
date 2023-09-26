@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Compte validé{% endblock %}
+{% block title %}Annonce validée{% endblock %}
 
 {% block body %}
 <div class="container mt-4">
-  <h1>Compte Validé !</h1>
-  <p>Le compte du recruteur {{ user.email }} à bien été validé.</p>
-  <p>Les accès recruteur lui ont été accordés</p>
+  <h1>Annonce Validée !</h1>
+  <p>L'annonce {{ annonce.JobTitle }} à bien été validée.</p>
   <a href="{{ path('app_consultant') }}" class="btn btn-secondary">Retour à la liste des validations en attente</a>
 </div>
 {% endblock %}
