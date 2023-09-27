@@ -106,8 +106,9 @@
         <thead>
             <tr>
                 <th scope="col">ID</th>
+                <th scope="col">Poste</th>
                 <th scope="col">Nom</th>
-                <th scope="col">Prénom</th>
+                <th scope="col">Prenom</th>
                 <th scope="col">CV</th>
                 <th scope="col">Valider</th>
                 <th scope="col">Rejeter</th>
@@ -120,7 +121,9 @@
                 <td>{{ canCandidature.Annonce.JobTitle }}</td>
                 <td>{{ canCandidature.Candidat.Nom }}</td>
                 <td>{{ canCandidature.Candidat.Prenom }}</td>
-                <td>{{ canCandidature.Candidat.Cv }}</td>
+                <td><a href="{{ 'uploads/cv/' ~ canCandidature.Candidat.Cv }}" class="btn btn-secondary"
+                        target="_blank">Consulter le
+                        CV</a></td>
                 <td>
                     <a href="{{ path('consultant.validate.candidature', { id: canCandidature.id }) }}"
                         class="btn btn-success">Valider</a>

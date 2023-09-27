@@ -28,6 +28,7 @@
                 <th scope="col">Emplacement</th>
                 <th scope="col">Description</th>
                 {% if is_granted('ROLE_RECRUTEUR') %}
+                <th scope="col">Candidature</th>
                 <th scope="col">Modification</th>
                 <th scope="col">Suppression</th>
                 {% elseif is_granted('ROLE_CANDIDAT') %}
@@ -46,6 +47,9 @@
                 <td>{{ annonce.Description }}</td>
                 {% if is_granted('ROLE_RECRUTEUR') %}
                 <td>
+                    <a href="{{ path('app_candidature', { id: annonce.id }) }}" class="btn btn-success">Candidature</a>
+                </td>
+                <td>
                     <a href="{{ path('annonce.edit', { id: annonce.id }) }}" class="btn btn-warning">Modifier</a>
                 </td>
                 <td>
@@ -53,7 +57,7 @@
                 </td>
                 {% elseif is_granted('ROLE_CANDIDAT') %}
                 <td>
-                    <a href="{{ path('candidature.new') }}" class="btn btn-success">Postuler</a>
+                    <a href="{{ path('candidature.new', { id: annonce.id }) }}" class="btn btn-success">Postuler</a>
                 </td>
                 {% endif %}
             </tr>
