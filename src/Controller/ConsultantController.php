@@ -7,8 +7,12 @@ use App\Entity\Annonce;
 use App\Entity\Candidature;
 use App\Repository\UserRepository;
 use App\Repository\AnnonceRepository;
+use Symfony\Component\Mime\Part\File;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CandidatureRepository;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -184,11 +188,26 @@ class ConsultantController extends AbstractController
      * @param EntityManagerInterface $manager
      */
     #[Route('/consultant/validate-candidature/{id}', name: 'consultant.validate.candidature', methods: ['GET', 'POST'])]
-    public function validateCandidature(Candidature $candidature, EntityManagerInterface $manager): Response
+    public function validateCandidature(Candidature $candidature, EntityManagerInterface $manager, MailerInterface $mailer): Response
     {
         $candidature->setIsValidate(true);
         $manager->persist($candidature);
         $manager->flush();
+
+        $email = (new TemplatedEmail())
+            ->from('no-reply@trtconseil.fr')
+            ->to($candidature->getAnnonce()->getRecruteur()->getUser()->getEmail())
+            ->subject('Nouvelle candidature !')
+            ->addPart(new DataPart(new File('uploads/cv/' . $candidature->getCandidat()->getCv())))
+            // path of the Twig template to render
+            ->htmlTemplate('emails/validate_candidature.html.twig')
+
+            // pass variables (name => value) to the template
+            ->context([
+                'candidature' => $candidature
+            ]);
+
+        $mailer->send($email);
 
         return $this->render('consultant/validate_candidature.html.twig', [
             'candidature' => $candidature,
