@@ -28,8 +28,8 @@ class CandidatureCrudController extends AbstractCrudController
         return [
             IdField::new('id')
                 ->setFormTypeOption('disabled', 'disabled'),
-            TextField::new('recruteur.company'),
-            TextField::new('candidat.email'),
+            TextField::new('annonce.recruteur.company'),
+            TextField::new('candidat.user.email'),
         ];
     }
 }

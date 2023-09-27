@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\RecruteurRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\RecruteurRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: RecruteurRepository::class)]
 class Recruteur
@@ -28,6 +30,14 @@ class Recruteur
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $company_city = null;
+
+    #[ORM\OneToMany(mappedBy: 'recruteur', targetEntity: Annonce::class, orphanRemoval: true)]
+    private Collection $annonces;
+
+    public function __construct()
+    {
+        $this->annonces = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +100,36 @@ class Recruteur
     public function setCompanyCity(?string $company_city): static
     {
         $this->company_city = $company_city;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Annonce>
+     */
+    public function getAnnonces(): Collection
+    {
+        return $this->annonces;
+    }
+
+    public function addAnnonce(Annonce $annonce): static
+    {
+        if (!$this->annonces->contains($annonce)) {
+            $this->annonces->add($annonce);
+            $annonce->setRecruteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnonce(Annonce $annonce): static
+    {
+        if ($this->annonces->removeElement($annonce)) {
+            // set the owning side to null (unless already changed)
+            if ($annonce->getRecruteur() === $this) {
+                $annonce->setRecruteur(null);
+            }
+        }
 
         return $this;
     }

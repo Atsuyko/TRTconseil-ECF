@@ -12,6 +12,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CandidatController extends AbstractController
 {
@@ -49,7 +51,7 @@ class CandidatController extends AbstractController
      */
     #[Route('/candidat/new', name: 'candidat.new')]
     // #[IsGranted(new Expression("is_granted('ROLE_CANDIDAT') and user === candidat.getUser()"))]
-    public function new(Request $request, EntityManagerInterface $manager): Response
+    public function new(Request $request, EntityManagerInterface $manager, SluggerInterface $slugger): Response
     {
 
         if (!$this->getUser()) {
@@ -68,6 +70,19 @@ class CandidatController extends AbstractController
             $newCandidat->setPrenom($form->get('prenom')->getData());
             $newCandidat->setCv(true);
 
+            $cv = $form->get('cv')->getData();
+            $originalFilename = pathinfo($cv->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $cv->guessExtension();
+            try {
+                $cv->move(
+                    $this->getParameter('cv_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+            }
+
+            $newCandidat->setCv($newFilename);
             $manager->persist($newCandidat);
             $manager->flush();
 
@@ -89,8 +104,9 @@ class CandidatController extends AbstractController
      */
     #[Route('/candidat/edit/{id}', 'candidat.edit', methods: ['GET', 'POST'])]
     // #[IsGranted(new Expression("is_granted('ROLE_CANDIDAT') and user === candidat.getUser()"))]
-    public function edit(CandidatRepository $candidatRepository, int $id, Request $request, EntityManagerInterface $manager): Response
+    public function edit(CandidatRepository $candidatRepository, int $id, Request $request, EntityManagerInterface $manager, SluggerInterface $slugger): Response
     {
+        $candidatCv = '';
         $candidat = $candidatRepository->findOneBy(["id" => $id]);
         $form = $this->createForm(CandidatType::class, $candidat);
         $form->handleRequest($request);
@@ -98,6 +114,19 @@ class CandidatController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $candidat = $form->getData();
 
+            $cv = $form->get('cv')->getData();
+            $originalFilename = pathinfo($cv->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $cv->guessExtension();
+            try {
+                $cv->move(
+                    $this->getParameter('cv_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+            }
+
+            $candidat->setCv($newFilename);
             $manager->persist($candidat);
             $manager->flush();
 
@@ -105,7 +134,7 @@ class CandidatController extends AbstractController
         }
 
         return $this->render('candidat/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\AnnonceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AnnonceRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: AnnonceRepository::class)]
 class Annonce
@@ -14,7 +16,7 @@ class Annonce
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'annonces')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Recruteur $recruteur = null;
 
@@ -29,6 +31,14 @@ class Annonce
 
     #[ORM\Column]
     private ?bool $IsValidate = null;
+
+    #[ORM\OneToMany(mappedBy: 'Annonce', targetEntity: Candidature::class, orphanRemoval: true)]
+    private Collection $candidatures;
+
+    public function __construct()
+    {
+        $this->candidatures = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -91,6 +101,36 @@ class Annonce
     public function setIsValidate(bool $IsValidate): static
     {
         $this->IsValidate = $IsValidate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Candidature>
+     */
+    public function getCandidatures(): Collection
+    {
+        return $this->candidatures;
+    }
+
+    public function addCandidature(Candidature $candidature): static
+    {
+        if (!$this->candidatures->contains($candidature)) {
+            $this->candidatures->add($candidature);
+            $candidature->setAnnonce($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidature(Candidature $candidature): static
+    {
+        if ($this->candidatures->removeElement($candidature)) {
+            // set the owning side to null (unless already changed)
+            if ($candidature->getAnnonce() === $this) {
+                $candidature->setAnnonce(null);
+            }
+        }
 
         return $this;
     }

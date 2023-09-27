@@ -28,7 +28,7 @@ class CandidatCrudController extends AbstractCrudController
         return [
             IdField::new('id')
                 ->setFormTypeOption('disabled', 'disabled'),
-            TextField::new('email')
+            TextField::new('user.email')
                 ->setFormTypeOption('disabled', 'disabled'),
             TextField::new('nom'),
             TextField::new('prenom'),
