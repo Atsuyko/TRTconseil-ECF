@@ -194,20 +194,20 @@ class ConsultantController extends AbstractController
         $manager->persist($candidature);
         $manager->flush();
 
-        $email = (new TemplatedEmail())
-            ->from('no-reply@trtconseil.fr')
-            ->to($candidature->getAnnonce()->getRecruteur()->getUser()->getEmail())
-            ->subject('Nouvelle candidature !')
-            ->addPart(new DataPart(new File('uploads/cv/' . $candidature->getCandidat()->getCv())))
-            // path of the Twig template to render
-            ->htmlTemplate('emails/validate_candidature.html.twig')
+        // $email = (new TemplatedEmail())
+        //     ->from('no-reply@trtconseil.fr')
+        //     ->to($candidature->getAnnonce()->getRecruteur()->getUser()->getEmail())
+        //     ->subject('Nouvelle candidature !')
+        //     ->addPart(new DataPart(new File('uploads/cv/' . $candidature->getCandidat()->getCv())))
+        //     // path of the Twig template to render
+        //     ->htmlTemplate('emails/validate_candidature.html.twig')
 
-            // pass variables (name => value) to the template
-            ->context([
-                'candidature' => $candidature
-            ]);
+        //     // pass variables (name => value) to the template
+        //     ->context([
+        //         'candidature' => $candidature
+        //     ]);
 
-        $mailer->send($email);
+        // $mailer->send($email);
 
         return $this->render('consultant/validate_candidature.html.twig', [
             'candidature' => $candidature,
